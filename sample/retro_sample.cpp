@@ -59,29 +59,31 @@ int main(int argc, const char** argv)
         return 1;
 
     VideoCapture capture;
-    if (!video_file.empty())
-    {
-        capture.open(video_file);
-        if (!capture.isOpened())
+    {   
+        if (!video_file.empty())
         {
-            cout << "Error: failed to open video stream for: " << video_file << endl;
+            capture.open(video_file);
+            if (!capture.isOpened())
+            {
+                cout << "Error: failed to open video stream for: " << video_file << endl;
+                return 1;
+            }
+        }
+        else if (use_camera)
+        {
+            capture.open(0);
+            if (!capture.isOpened())
+            {
+                cout << "Error: failed to open video stream for camera #0" << endl;
+                return 1;
+            }
+        }
+        else
+        {
+            cout << "Error: declare a source of images" << endl;
+            parser.printParams();
             return 1;
         }
-    }
-    else if (use_camera)
-    {
-        capture.open(0);
-        if (!capture.isOpened())
-        {
-            cout << "Error: failed to open video stream for camera #0" << endl;
-            return 1;
-        }
-    }
-    else
-    {
-        cout << "Error: declare a source of images" << endl;
-        parser.printParams();
-        return 1;
     }
 
     Mat frame;
