@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
@@ -99,13 +100,17 @@ int main(int argc, const char** argv)
     params.frameSize   = frame.size();
     RetroFilter filter(params);
 
+	VideoWriter captur;
+	captur.open("kol.avi",8,1.0/24.0,static_cast<Size>(frame.size()));
+	if(!captur.isOpened()) std::cout<<"not opened";
+
     long sh=0;
     for(;;)
     {
         Mat retroFrame;
-        TS(filter);
+        //TS(filter);
         filter.applyToVideo(frame, retroFrame);
-        TE(filter);
+        //TE(filter);
 
         imshow("Original Movie", frame);
         imshow("Retro Movie", retroFrame);
@@ -114,10 +119,11 @@ int main(int argc, const char** argv)
             break;
 
         capture >> frame;
+		captur << frame;
         if(frame.empty()) break;
-		if(sh>1000) break;
+		if(sh>50) break;
 		sh++;
-		std::cout<<sh<<"\n";
+		//std::cout<<sh<<"\n";
     }
 
     return 0;
