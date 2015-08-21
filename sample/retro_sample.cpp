@@ -89,15 +89,17 @@ int main(int argc, const char** argv)
     Mat frame;
     capture >> frame;
 
-    if (frame.empty())
+    while (frame.empty())
     {
         // empty video; lets consider this to be OK
-        return 0;
+        //return 0;
+        capture >> frame;
     }
 
     params.frameSize   = frame.size();
     RetroFilter filter(params);
 
+    long sh=0;
     for(;;)
     {
         Mat retroFrame;
@@ -113,6 +115,9 @@ int main(int argc, const char** argv)
 
         capture >> frame;
         if(frame.empty()) break;
+		if(sh>1000) break;
+		sh++;
+		std::cout<<sh<<"\n";
     }
 
     return 0;
