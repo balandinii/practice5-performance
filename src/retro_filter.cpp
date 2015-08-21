@@ -30,8 +30,6 @@ RetroFilter::RetroFilter(const Parameters& params) : rng_(time(0))
         resize(params_.scratches, params_.scratches, params_.frameSize);
     }
 
-    hsvScale_ = 1;
-    hsvOffset_ = 20;
 }
 
 void RetroFilter::applyToVideo(const Mat& frame, Mat& retroFrame)
@@ -68,7 +66,7 @@ void RetroFilter::applyToVideo(const Mat& frame, Mat& retroFrame)
     {
         for (row = 0; row < luminance.size().height; row += 1)
         {
-            hsv_pixel.ptr()[2] = cv::saturate_cast<uchar>(luminance.at<uchar>(row, col) * hsvScale_ + hsvOffset_);
+            hsv_pixel.ptr()[2] = cv::saturate_cast<uchar>(luminance.at<uchar>(row, col) + 20);
             hsv_pixel.ptr()[0] = 19;
             hsv_pixel.ptr()[1] = 78;
 
